@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file
+ * Contains jsonapi_webform_submissions.module.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function jsonapi_webform_submissions_entity_base_field_info(EntityTypeInterface $entity_type) {
+
+  $fields = [];
+
+  switch ($entity_type->id()) {
+    case "webform_submission":
+      $fields['submission_data'] = BaseFieldDefinition::create('string')
+        ->setName('submission_data')
+        ->setLabel(t('Submission data'))
+        ->setComputed(TRUE)
+        ->setClass('Drupal\jsonapi_webform_submissions\WebformSubmissionDataItemList')
+        ->setDisplayConfigurable('view', TRUE)
+        ->setDisplayOptions('view', [
+          'label' => 'hidden',
+          'weight' => -5,
+        ]);
+      break;
+  }
+
+  if (!empty($fields)) {
+    return $fields;
+  }
+}
